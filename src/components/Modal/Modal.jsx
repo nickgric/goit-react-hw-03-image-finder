@@ -17,7 +17,7 @@ class Modal extends Component {
   };
 
   render() {
-    const { closeModal, large, id } = this.props;
+    const { closeModal, large } = this.props;
     return (
       <div onClick={closeModal} className={styles.overlay}>
         <div className={styles.modal}>
