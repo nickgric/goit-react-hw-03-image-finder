@@ -10,7 +10,6 @@ import Loader from './Loader';
 import Button from './Button';
 import Modal from './Modal';
 import Message from './Message';
-import { findAllInRenderedTree } from 'react-dom/test-utils';
 
 export class App extends Component {
   state = {
