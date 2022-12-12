@@ -10,6 +10,7 @@ import Loader from './Loader';
 import Button from './Button';
 import Modal from './Modal';
 import Message from './Message';
+import { findAllInRenderedTree } from 'react-dom/test-utils';
 
 export class App extends Component {
   state = {
@@ -26,14 +27,19 @@ export class App extends Component {
   onSubmit = async event => {
     event.preventDefault();
 
+    const { page } = this.state;
+    const query = event.target.elements.input.value;
+
+    if (query.trim() === '') {
+      alert('Type your query!');
+      return;
+    }
+
     this.setState({
       photos: [],
       loading: true,
       status: 'idle',
     });
-
-    const { page } = this.state;
-    const query = event.target.elements.input.value;
 
     const data = await fetch(query, page);
 
