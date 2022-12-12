@@ -79,7 +79,7 @@ export class App extends Component {
 
     const { photos } = this.state;
     const id = event.target.name;
-    const { large } = photos.find(photo => photo.id == id);
+    const { large } = photos.find(photo => photo.id === +id);
 
     this.setState({ large });
   };

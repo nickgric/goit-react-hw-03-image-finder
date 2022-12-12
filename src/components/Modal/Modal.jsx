@@ -17,11 +17,11 @@ class Modal extends Component {
   };
 
   render() {
-    const { closeModal, large } = this.props;
+    const { closeModal, large, id } = this.props;
     return (
       <div onClick={closeModal} className={styles.overlay}>
         <div className={styles.modal}>
-          <img src={large} />
+          <img src={large} alt="Photo" />
         </div>
       </div>
     );
