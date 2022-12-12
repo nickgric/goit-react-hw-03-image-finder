@@ -1,9 +1,9 @@
 import styles from './ImageGalleryItem.module.css';
 
-const ImageGalleryItem = ({ photo, id }) => {
+const ImageGalleryItem = ({ photo, id, modalHandler }) => {
   return (
-    <li className="gallery-item" id={id}>
-      <img src={photo} />
+    <li onClick={modalHandler} className={styles.item}>
+      <img src={photo} name={id} />
     </li>
   );
 };

@@ -2,7 +2,7 @@ import styles from './Message.module.css';
 
 const Message = ({ message }) => {
   return (
-    <div>
+    <div className={styles.container}>
       <p>{message}</p>
     </div>
   );

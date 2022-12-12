@@ -4,8 +4,8 @@ import styles from './Loader.module.css';
 
 const Loader = () => {
   return (
-    <div>
-      <TailSpin />
+    <div className={styles.container}>
+      <TailSpin color="gray" />
     </div>
   );
 };

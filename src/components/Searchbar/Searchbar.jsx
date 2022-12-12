@@ -2,7 +2,7 @@ import styles from './Searchbar.module.css';
 
 const Searchbar = ({ onSubmit }) => {
   return (
-    <header className="searchbar">
+    <header className={styles.searchbar}>
       <form className="form" onSubmit={onSubmit}>
         <button type="submit" className="button">
           <span className="button-label">Search</span>

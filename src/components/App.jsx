@@ -20,6 +20,7 @@ export class App extends Component {
     status: 'idle', // idle, resolved, rejected
     loading: false,
     modal: false,
+    large: null,
   };
 
   onSubmit = async event => {
@@ -55,9 +56,7 @@ export class App extends Component {
     }
   };
 
-  onClick = async () => {
-    console.log('test');
-
+  onLoadMore = async () => {
     this.setState({
       loading: true,
     });
@@ -75,9 +74,30 @@ export class App extends Component {
     }));
   };
 
+  modalHandler = event => {
+    this.setState({ modal: true });
+
+    const { photos } = this.state;
+    const id = event.target.name;
+    const { large } = photos.find(photo => photo.id == id);
+
+    this.setState({ large });
+  };
+
+  closeModal = event => {
+    if (event.target === event.currentTarget) {
+      this.setState({ modal: false });
+    }
+  };
+
+  closeModalByEsc = () => {
+    this.setState({ modal: false });
+  };
+
   render() {
-    const { photos, status, modal, page, pages, loading } = this.state;
-    const { onSubmit, onClick } = this;
+    const { photos, status, modal, page, pages, loading, large } = this.state;
+    const { onSubmit, onLoadMore, modalHandler, closeModal, closeModalByEsc } =
+      this;
 
     return (
       <>
@@ -88,19 +108,32 @@ export class App extends Component {
         {status === 'resolved' && (
           <ImageGallery>
             {photos.map(({ small, id }) => {
-              return <ImageGalleryItem photo={small} key={id} id={id} />;
+              return (
+                <ImageGalleryItem
+                  modalHandler={modalHandler}
+                  photo={small}
+                  key={id}
+                  id={id}
+                />
+              );
             })}
           </ImageGallery>
         )}
         {status === 'resolved' && page < pages && (
-          <Button title="Load more" onClick={onClick} />
+          <Button title="Load more" onClick={onLoadMore} />
         )}
 
         {loading && <Loader />}
 
         {status === 'rejected' && <Message message="Nothing found" />}
 
-        {modal && <Modal />}
+        {modal && (
+          <Modal
+            closeModal={closeModal}
+            closeModalByEsc={closeModalByEsc}
+            large={large}
+          />
+        )}
       </>
     );
   }
