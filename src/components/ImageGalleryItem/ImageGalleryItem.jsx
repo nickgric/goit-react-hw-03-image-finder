@@ -1,9 +1,9 @@
 import styles from './ImageGalleryItem.module.css';
 
-const ImageGalleryItem = ({ photo, id, modalHandler }) => {
+const ImageGalleryItem = ({ small, large, id, modalHandler }) => {
   return (
-    <li onClick={modalHandler} className={styles.item}>
-      <img src={photo} name={id} alt="Something interesting" />
+    <li onClick={() => modalHandler(large)} className={styles.item} key={id}>
+      <img src={small} name={id} alt="Something interesting" />
     </li>
   );
 };

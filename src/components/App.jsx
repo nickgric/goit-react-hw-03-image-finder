@@ -23,10 +23,44 @@ export class App extends Component {
     large: null,
   };
 
+  async componentDidUpdate(_, prevState) {
+    const { query, page } = this.state;
+
+    if (prevState.page !== page) {
+      const data = await fetch(query, page);
+
+      this.setState(prevState => ({
+        photos: [...prevState.photos, ...data.pictures],
+        loading: false,
+      }));
+    }
+
+    if (prevState.query !== query) {
+      const data = await fetch(query, page);
+
+      if (data.pictures.length !== 0) {
+        this.setState({
+          photos: data.pictures,
+          pages: data.pages,
+          status: 'resolved',
+          page: 1,
+          query,
+          loading: false,
+        });
+      }
+
+      if (data.pictures.length === 0) {
+        this.setState({
+          status: 'rejected',
+          loading: false,
+        });
+      }
+    }
+  }
+
   onSubmit = async event => {
     event.preventDefault();
 
-    const { page } = this.state;
     const query = event.target.elements.input.value;
 
     if (query.trim() === '') {
@@ -38,55 +72,23 @@ export class App extends Component {
       photos: [],
       loading: true,
       status: 'idle',
+      query,
     });
-
-    const data = await fetch(query, page);
-
-    if (data.pictures.length !== 0) {
-      this.setState({
-        photos: data.pictures,
-        pages: data.pages,
-        status: 'resolved',
-        page: 1,
-        query,
-        loading: false,
-      });
-    }
-
-    if (data.pictures.length === 0) {
-      this.setState({
-        status: 'rejected',
-        loading: false,
-      });
-    }
   };
 
   onLoadMore = async () => {
-    this.setState({
-      loading: true,
-    });
-
-    const { query, page } = this.state;
+    const { page } = this.state;
 
     const nextPage = page + 1;
 
-    const data = await fetch(query, nextPage);
-
-    this.setState(prevState => ({
-      photos: [...prevState.photos, ...data.pictures],
+    this.setState({
+      loading: true,
       page: nextPage,
-      loading: false,
-    }));
+    });
   };
 
-  modalHandler = event => {
-    this.setState({ modal: true });
-
-    const { photos } = this.state;
-    const id = event.target.name;
-    const { large } = photos.find(photo => photo.id === +id);
-
-    this.setState({ large });
+  modalHandler = large => {
+    this.setState({ modal: true, large });
   };
 
   closeModal = event => {
@@ -112,11 +114,12 @@ export class App extends Component {
 
         {status === 'resolved' && (
           <ImageGallery>
-            {photos.map(({ small, id }) => {
+            {photos.map(({ small, large, id }) => {
               return (
                 <ImageGalleryItem
                   modalHandler={modalHandler}
-                  photo={small}
+                  small={small}
+                  large={large}
                   key={id}
                   id={id}
                 />
